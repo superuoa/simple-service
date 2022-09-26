@@ -3,9 +3,6 @@ package com.yit.hello.bean;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 public class Product {
 
 	int id;
@@ -45,7 +42,7 @@ public class Product {
 		this.instock = instock;
 	}
 	
-	public List<Product> getProducts(){
+	public List<Product> getItems(){
 		
 		List<Product> list = new ArrayList<Product>();
 		
@@ -76,27 +73,5 @@ public class Product {
 		
 	}
 	
-	public static List<Product> buildJsonToCallsObject(String json){
-
-		Gson gson = new Gson();
-		
-		TypeToken<List<Product>> token = new TypeToken<List<Product>>() {};
-		List<Product> cList = gson.fromJson(json, token.getType());
-		
-		
-		return cList;
-		
-	}
-	
-	public static Product buildJsonToObject(String json){
-
-		Gson gson = new Gson();
-
-		Product c = gson.fromJson(json, Product.class);
-		
-		
-		return c;
-		
-	}
 	
 }
