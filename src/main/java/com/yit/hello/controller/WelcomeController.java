@@ -1,6 +1,7 @@
 package com.yit.hello.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,5 +26,13 @@ public class WelcomeController {
 		return "{\"id\":1,\"name\":\"Notebook DELL\",\"description\":\"RAM: 4, CPU: Intel Core i7-10750H\",\"price\":0,\"instock\":10}";
 				
 	}
+	
+	@RequestMapping( value = "/save", method = RequestMethod.POST)
+    public String save(@RequestBody String data) {
+		
+		return "Save " + data + " Complete.";
+				
+	}
+	
 	
 }
