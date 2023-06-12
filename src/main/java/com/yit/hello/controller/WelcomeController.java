@@ -1,4 +1,4 @@
-package com.yit.hello.controller;
+﻿package com.yit.hello.controller;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +13,7 @@ public class WelcomeController {
 
 	@RequestMapping( value = "/", method = RequestMethod.GET)
 	public String hello() {
-		return "Hello Simple Services";
+		return "Hello Simple Services 2";
 	}
 	
 	@RequestMapping( value = "/getProducts", method = RequestMethod.GET)
