@@ -1,0 +1,61 @@
+def mvnCmd = "mvn -s setting-nexus.xml "
+
+pipeline {
+    
+  agent any
+  tools {
+    maven 'maven3.6'
+    oc 'oc4.9'
+  }
+  stages {
+    stage('Build App') {
+      steps {
+
+        git branch: '${GIT_BRANCH}', url: "https://github.com/superuoa/simple-service.git"
+        sh "${mvnCmd} clean package -Djavax.net.ssl.trustStore=/opt/nexusTruststore.jks -Djavax.net.ssl.trustStorePassword=changeit"
+      }
+    }
+
+    stage('Code Analysis') {
+      steps {
+        script {
+            echo "Sonorqube step deploy to Sonarqube";
+            sh "${mvnCmd} sonar:sonar -Djavax.net.ssl.trustStore=/opt/Mytruststore.jks -Djavax.net.ssl.trustStorePassword=changeit -Dsonar.host.url=https://sonarqube.esc.yipintsoigroup.com -DskipTests=true -Dsonar.login=${SONAR_USERNAME} -Dsonar.password=${SONAR_PASSWORD}"
+
+        }
+      }
+    }
+    stage('Push Nexus') {
+      steps {
+        echo "Nexus step deploy to nexus";
+        sh "${mvnCmd} deploy -DskipTests=true -DrepositoryId=nexus -Djavax.net.ssl.trustStore=/opt/nexusTruststore.jks -Djavax.net.ssl.trustStorePassword=changeit"
+      }
+    }
+    stage('Build Image') {
+      steps {
+        sh "cp target/simple-service.jar ./ROOT.jar"
+        sh "docker build -t simple-service ."
+        sh "docker tag simple-service nexus.esc.yipintsoigroup.com/simple-service:${TAG_IMAGES}"
+        sh "docker login nexus.esc.yipintsoigroup.com -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD}"
+        sh "docker push nexus.esc.yipintsoigroup.com/simple-service:${TAG_IMAGES}"
+
+      }
+    }
+    
+    stage('Deploy DEV') {
+      steps {
+        script {
+          sh "oc login --insecure-skip-tls-verify -u=${OC_USERNAME} -p=${OC_PASSWORD} -s=https://api.dresc.yipintsoigroup.com:6443"
+          sh "oc project ${DEV_PROJECT}"
+          sh "oc delete all --selector app=simple-service"
+          sleep(time:30,unit:"SECONDS")
+          sh 'cp DeploymentConfig.yml DeploymentConfigDev.yml'
+          sh 'sed -i "s/{{PROJECT}}/${DEV_PROJECT}/g" DeploymentConfigDev.yml';
+          sh 'sed -i "s/{{TAG_IMAGE}}/${TAG_IMAGES}/g" DeploymentConfigDev.yml';
+          sh "oc create -f DeploymentConfigDev.yml"
+        }
+      }
+    }
+    
+  }
+}
