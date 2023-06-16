@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class SimpleServiceApplication {
- //fsfdsfefs
- //fsfdsfsdf 22222
-// dskfjdskfds
+ 
+// kik comment test
 	public static void main(String[] args) {
 		SpringApplication.run(SimpleServiceApplication.class, args);
 	}
