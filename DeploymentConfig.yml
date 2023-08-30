@@ -15,8 +15,8 @@ spec:
         app: simple-service
     spec:
       containers:
-      - name: catalog
-        image: nexus.esc.yipintsoigroup.com/simple-service:{{TAG_IMAGE}}
+      - name: simple-service
+        image: 192.168.77.24/simple-service:{{TAG_IMAGE}}
         ports:
         - containerPort: 8080
       imagePullSecrets:

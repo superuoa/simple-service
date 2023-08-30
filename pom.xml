@@ -28,11 +28,11 @@
      <distributionManagement>
         <repository>
             <id>nexus</id>
-            <url>https://nexus.esc.yipintsoigroup.com/repository/maven-releases/</url>
+            <url>https://192.168.77.24/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>nexus</id>
-            <url>https://nexus.esc.yipintsoigroup.com/repository/maven-snapshots/</url>
+            <url>https://192.168.77.24/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
     
